@@ -71,7 +71,7 @@ function the_attachment_image( $attachment_id, $additional_attributes = [], $siz
  * @param  string  $size                   The specific image size from add_image_size().
  * @return HTMLElement
  */
-function get_custom_post_thumbnail( $post_id, $additional_attributes = [], $size = 'featured-image' ) {
+function get_custom_post_thumbnail( $post_id = 0, $additional_attributes = [], $size = 'featured-image' ) {
     $output = '';
     if ( empty( $post_id ) ) {
         $post_id = get_the_ID();
@@ -93,8 +93,150 @@ function get_custom_post_thumbnail( $post_id, $additional_attributes = [], $size
  * @param  string  $size                   The specific image size from add_image_size().
  * @return HTMLElement
  */
-function the_custom_post_thumbnail( $post_id, $additional_attributes = [], $size = 'featured-image' ) {
+function the_custom_post_thumbnail( $post_id = 0, $additional_attributes = [], $size = 'featured-image' ) {
     echo get_custom_post_thumbnail( $post_id, $additional_attributes, $size );
+}
+
+/**
+ * Return the entry post thumbnail.
+ *
+ * @since 1.0.0
+ * 
+ * @return HTMLElement
+ */
+function get_entry_post_thumbnail() {
+    if ( ! has_post_thumbnail() || is_attachment() ) {
+        return;
+    }
+
+    $output = '';
+    $output .= '<figure class="cu-entry-post-thumbnail">';
+    if ( is_single() ) {
+        $output .= get_custom_post_thumbnail( get_the_ID() );
+    } else {
+        $output .= '<a href="'. get_permalink() .'" aria-hidden="true">';
+        $output .= get_custom_post_thumbnail( get_the_ID() );
+        $output .= '</a>'; 
+    }
+    $output .= '</figure>';
+    return $output; 
+}
+
+/**
+ * Prints the entry post thumbnail.
+ *
+ * @since 1.0.0
+ * 
+ * @return void
+ */
+function the_entry_post_thumbnail() {
+    echo get_entry_post_thumbnail();
+}
+
+/**
+ * Return the entry post author link.
+ *
+ * @since 1.0.0
+ * 
+ * @param  string  $label  The link label.
+ * @return HTMLElement
+ */
+function get_entry_posted_by( $label = '' ) {
+    $link  = '';
+    $link .= '<a href="'. get_author_posts_url( get_the_author_meta( 'ID' ) ) .'" class="cu-entry-author__link">';
+    $link .= esc_html( get_the_author() );
+    $link .= '</a>';
+
+    $output = $link;
+    if ( ! empty( $label ) ) {
+        $output = '<span class="cu-entry-author cu-entry-author__label">'. esc_html( $label ) .' '. $link .'</span>';
+    }
+    return $output;
+}
+
+/**
+ * Prints the entry post author link.
+ *
+ * @since 1.0.0
+ * 
+ * @param  string  $label  The link label.
+ * @return void
+ */
+function the_entry_posted_by( $label = '' ) {
+    echo get_entry_posted_by( $label );
+}
+
+/**
+ * Returns the entry post posted on date link.
+ *
+ * @since 1.0.0
+ * 
+ * @param  string  $label  The link label.
+ * @return HTMLElement
+ */
+function get_entry_posted_on( $label = '' ) {
+    $link = get_date_link( get_the_ID(), 'day', 'F d, Y', 'cu-entry-date__link' );
+
+    $output = $link;
+    if ( ! empty( $label ) ) {
+        $output = '<span class="cu-entry-date">'. esc_html( $label ) .' '.$link .'</span>';
+    }
+    return $output;
+}
+
+/**
+ * Prints the entry post posted on date link.
+ *
+ * @since 1.0.0
+ * 
+ * @param  string  $label  The link label.
+ * @return HTMLElement
+ */
+function the_entry_posted_on( $label = '' ) {
+    echo get_entry_posted_on( $label );
+}
+
+/**
+ * Returns the tag list.
+ *
+ * @since 1.0.0
+ * 
+ * @param  int     $post_id  The post id target.
+ * @param  string  $class    Additional class.
+ * @return HTMLElement
+ */
+function get_tag_list( $post_id = 0, $class = '' ) {
+    if ( empty( $post_id ) ) {
+        $post_id = get_the_ID();
+    }
+
+    $output = '';
+    $tags   = get_the_tags( $post_id );
+    if ( ! empty( $tags ) ) {
+        $output .= '<ul class="'. esc_attr( $class ) .'">';
+        foreach( $tags as $tag ) {
+            $output .= '<li>';
+            $output .= '<a href="'. esc_url( get_tag_link( $tag->term_id ) ) .'">';
+            $output .= esc_html( $tag->name );
+            $output .= '</a>';
+            $output .= '</li>';
+        }
+        $output .= '</ul>';
+    }
+    return $output;
+}
+
+/**
+ * Prints the tag list.
+ *
+ * @since 1.0.0
+ * 
+ * @param  int     $post_id  The post id target.
+ * @param  string  $class    Additional class.
+ * @return void
+ */
+function the_tag_list( $post_id = 0, $class = '' ) {
+    echo get_tag_list( $post_id, $class );
 }
 
 
@@ -109,22 +251,30 @@ function the_custom_post_thumbnail( $post_id, $additional_attributes = [], $size
  * @param  string  $class    List of class.
  * @return HTMLELement
  */
-function get_date_link( $post_id, $type, $format, $class = '' ) {
+function get_date_link( $post_id, $type = 'day', $format = 'F d, Y', $class = '' ) {
     $date = [
-        'd'   => get_the_date( 'd', $post_id ),
+        'd' => get_the_date( 'd', $post_id ),
         'm' => get_the_date( 'm', $post_id ),
-        'y'  => get_the_date( 'Y', $post_id)
+        'y' => get_the_date( 'Y', $post_id )
     ];
 
-    if ( $type == 'day' ) {
-        $link = get_day_link( $date['y'], $date['m'], $date['d'] );
-    } elseif ( $type == 'month' ) {
-        $link = get_month_link( $date['y'], $date['m'] );
-    } elseif ( $type == 'year' ) {
-        $link = get_year_link( $date['y'] );
+    switch( $type ) {
+        case 'day':
+            $link = get_day_link( $date['y'], $date['m'], $date['d'] );
+            break;
+        case 'month':
+            $link = get_month_link( $date['y'], $date['m'] );
+            break;
+        case 'year':
+            $link = get_year_link( $date['y'] );
+            break;
     }
-    $title = get_the_date( $format, $post_id );
-    return '<a class="'. $class .'" href="'. $link .'">'. $title .'</a>';
+
+    $formated_date = get_the_date( $format, $post_id );
+    $output  = '<a class="'. esc_attr( $class ) .'" href="'. esc_url( $link ) .'">';
+    $output .= '<time datetime="'. get_the_date( 'yy-mm-dd', $post_id ) .'">'. $formated_date .'</time>';
+    $output .= '</a>';
+    return $output;
 }
 
 /**
@@ -176,34 +326,7 @@ function get_custom_pagination( $total_pages, $class = '' ){
     return $output;
 }
 
-/**
- * Prints the list of tags on a certain post.
- *
- * @since 1.0.0
- * 
- * @param  number  $post_id  The target post id.
- * @return HTMLElement
- */
-function get_post_tag_list( $post_id ) {
-	if ( empty( $post_id ) ) {
-		return '';
-	}
 
-	$output = '';
-	$tags   = get_the_tags( $post_id );
-	if ( ! empty( $tags ) ) {
-		$output .= '<ul>';
-		foreach( $tags as $tag ) {
-			$output .= '<li>';
-			$output .= '<a href="'. esc_url( get_tag_link( $tag->term_id ) ) .'">';
-			$output .= esc_html( $tag->name );
-			$output .= '</a>';
-			$output .= '</li>';
-		}
-		$output .= '</ul>';
-	}
-	return $output;
-}
 
 /**
  * Returns the svg icon based on icon name.
