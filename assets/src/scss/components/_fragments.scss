@@ -1,0 +1,65 @@
+/**
+ * Fragments.
+ */
+.cu {
+
+	// Links
+	&-link {
+		&--violet {
+			color: $clr-violet;
+
+			&:hover,
+			&:focus {
+				color: $clr-black;
+				@include transition;
+			}
+		}
+	}
+
+	
+	// Breadcrumb
+    &-breadcrumb {
+        display: flex;
+        justify-content: center;
+        color: $clr-black;
+        font-weight: 500;
+        @include default-list;
+
+        li {
+            padding: 0 5px;
+            a {
+                color: $clr-black;
+
+                &:hover,
+                &:focus {
+                    color: $clr-violet;
+                    @include transition;
+                }
+            }
+        }
+
+        @include media-xs {
+            font-size: 14px;
+        }
+    }
+
+    // Preloader
+    &-preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: $clr-white;
+        @include flex-center;
+        z-index: 999999;
+
+        svg {
+            width: 80px;
+        }
+
+        &[data-visibility="hidden"] {
+            animation: fade-out-forward 0.7s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+        }
+    }
+}

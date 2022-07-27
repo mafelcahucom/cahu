@@ -1,0 +1,92 @@
+/**
+ * Header.
+ */
+.cu {
+	&-header {
+		background-color: $clr-white;
+		border-bottom: 1px solid rgba(230,230,230,0.6);
+
+		// search panel
+		&__search {
+			position: relative;
+        	margin-left: 15px;
+
+        	&__btn {
+        		height: 100%;
+        		background: transparent;
+        		border: 0;
+        		fill: $clr-dark;
+
+        		&:hover,
+        		&:focus {
+        			svg {
+	                    fill: $clr-pink;
+	                    @include transition;
+	                }
+        		}
+
+        		svg {
+        			width: 20px;
+        		}
+        	}
+
+        	&__panel {
+	            display: none;
+	            position: absolute;
+	            padding: 15px;
+	            top: 100%;
+	            right: 0;
+	            width: 320px;
+	            background: $clr-white;
+	            border-radius: 10px;
+	            box-shadow: 0px 3px 30px 0px rgba(0, 33, 85, 0.1);
+	            z-index: 9999;
+	        }
+
+        	&[data-state="open"] {
+	            .cu-header__search {
+	                &__magnify {
+	                    display: none;
+	                }
+	                &__close {
+	                    display: block;
+	                }
+	                &__panel {
+	                    display: block;
+	                    animation: fade-in 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+	                }
+	            }
+	        }
+
+	        &[data-state="close"] {
+	            .cu-header__search {
+	                &__magnify {
+	                    display: block;
+	                }
+	                &__close {
+	                    display: none;
+	                }
+	            }
+	        }
+		}
+	}
+
+	// logo
+	&-logo {
+		padding: 20px 0;
+
+		img {
+			border-radius: 5px;
+		}
+	}
+}
+
+// scrolled
+body.cu-scrolled {
+    .cu-header {
+        position: fixed;
+        width: 100%;
+        animation: slide-in-top 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+        z-index: 9999;
+    }
+}

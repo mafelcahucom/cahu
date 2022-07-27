@@ -1,0 +1,18 @@
+{
+    "name": "mafel/cahu",
+    "description": "WordPress Starting Theme.",
+    "type": "theme",
+    "license": "GNU",
+    "authors": [
+        {
+            "name": "Mafel John Cahucom",
+            "email": "mafeljohn.timkang.cahucom070596@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Cahu\\": "app/"
+        }
+    }
+}

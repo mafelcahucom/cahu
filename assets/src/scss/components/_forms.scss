@@ -1,0 +1,70 @@
+/**
+ * Forms.
+ */
+.cu-input-field {
+	input[type="text"],
+	input[type="email"],
+	input[type="number"],
+	select,
+	textarea {
+		padding: 8px 16px;
+		width: 100%;
+		color: #616a66;
+		background: #f6f7fb;
+		border: 2px solid #f6f7fb;
+    	border-radius: $br-radius;
+		height: 44px;
+		font-size: 14px;
+		line-height: 21px;
+		outline: none;
+
+		&:hover,
+		&:focus {
+			border-color: $clr-darker;
+			@include transition;
+		}
+	}
+}
+
+
+/**
+ * Contact Form 7
+ */
+.wpcf7-not-valid-tip {
+	font-size: 14px;
+}
+
+.wpcf7 form .wpcf7-response-output {
+  	margin: 20px 0 0 0;
+    padding: 0.2em 1em;
+    color: #ffffff;
+    border: 2px solid #00a0d2; /* Blue */
+    background-color: #00a0d2;
+    border-radius: $br-radius;
+}
+ 
+.wpcf7 form.init .wpcf7-response-output {
+    display: none;
+}
+ 
+.wpcf7 form.sent .wpcf7-response-output {
+    border-color: #46b450; /* Green */
+    background-color: #46b450;
+}
+ 
+.wpcf7 form.failed .wpcf7-response-output,
+.wpcf7 form.aborted .wpcf7-response-output {
+    border-color: #dc3232; /* Red */
+    background-color: #dc3232;
+}
+ 
+.wpcf7 form.spam .wpcf7-response-output {
+    border-color: #f56e28; /* Orange */
+    background-color: #f56e28;
+}
+ 
+.wpcf7 form.invalid .wpcf7-response-output,
+.wpcf7 form.unaccepted .wpcf7-response-output {
+    border-color: #ffb900; /* Yellow */
+    background-color: #ffb900;
+}

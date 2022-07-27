@@ -1,0 +1,138 @@
+/**
+ * Navigation.
+ */
+.cu {
+	&-nav {
+		height: 60px;
+		&__menu {
+	        display: flex;
+	        align-items: center;
+	        padding: 0;
+	        margin: 0;
+	        height: 100%;
+	        list-style: none;
+
+	        a {
+	            color: $clr-dark;
+	            text-decoration: none;
+	            font-weight: 500;
+	        }
+
+	        li.menu-item-has-children {
+	            position: relative;
+
+	            .sub-menu {
+	                position: absolute;
+	                display: none;
+	                padding: 0;
+	                margin: 0;
+	                width: 220px;
+	                list-style: none;
+	                border-radius: 2px;
+	                box-shadow: 0px 5px 15px 0px rgba(0,33,85,0.10);
+	                z-index: 9999;
+
+	                li {
+	                    a {
+	                        display: block;
+	                        padding: 10px 15px;
+	                        background: $clr-white;
+
+	                        &:hover,
+	                        &:focus {
+	                            color: $clr-white;
+	                            background: $clr-darker;
+	                            @include transition;
+	                        }
+	                    }
+
+	                    &.current-menu-item > a {
+	                        color: $clr-white;
+	                        background: $clr-darker;
+	                    }
+	                }
+	            }
+	        }
+
+	        // first layer
+	        & > li {
+	            margin-right: 25px;
+	            height: 100%;
+
+	            & > a {
+	                display: flex;
+	                align-items: center;
+	                height: 100%;
+
+	                &:hover,
+	                &:focus {
+	                    color: $clr-dark;
+	                    @include transition;
+	                }
+	            }
+
+	            &.current-menu-item > a {
+	                color: $clr-pink;
+	            }
+
+	            &:last-child {
+	                margin-right: 0px;
+	            }
+
+	            &.menu-item-has-children {
+	                & > a:after {
+	                    content: '+';
+	                    font-size: 16px;
+	                    margin-left: 5px;
+	                }
+
+	                &:last-child {
+	            		&:hover > .sub-menu,
+	            		&:focus > .sub-menu {
+	            			left: -130px;
+	            		}
+	            	}
+
+	                // second layer
+	                & > .sub-menu {
+	                    li {
+	                        &.menu-item-has-children {
+	                            & > a:after {
+	                                content: '+';
+	                                font-size: 16px;
+	                                margin-left: 5px;
+	                                position: absolute;
+	                                right: 15px;
+	                            }
+
+	                            &:hover > .sub-menu,
+	                            &:focus > .sub-menu {
+	                                display: block;
+	                                top: 0;
+	                                left: -220px;
+	                                @include transition;
+	                            }
+	                        }
+
+	                        &:first-child a {
+	                            border-top-left-radius: 5px;
+	                            border-top-right-radius: 5px;
+	                        }
+
+	                        &:last-child a {
+	                            border-bottom-left-radius: 5px;
+	                            border-bottom-right-radius: 5px;
+	                        }
+	                    }
+	                }
+
+	                &:hover > .sub-menu,
+	                &:hover > .sub-menu {
+	                    display: block;
+	                    @include transition;
+	                }
+	            }           
+	        }
+	    }
+	}
+}

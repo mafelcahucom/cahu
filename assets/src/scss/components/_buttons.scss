@@ -1,0 +1,101 @@
+/**
+ * Buttons.
+ */
+.cu-btn {
+    display: inline-block;
+    padding: 11px 23px;
+    width: fit-content;
+    fill: $clr-white;
+    color: $clr-white;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 16px;
+    background-color: $clr-black;
+    border-radius: $br-radius;
+    border: 1px solid $clr-black;
+
+    svg {
+        display: block;
+        width: 20px;
+    }
+
+    &:hover:not([data-state="loading"]) {
+        background-color: $clr-violet;
+        border-color: $clr-violet;
+        @include transition;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 0.25rem rgba(49,132,253,0.5);
+    }
+
+    &[data-state="loading"] {
+        cursor: wait;
+    }
+
+    &[data-state="disable"] {
+        cursor: not-allowed;
+    }
+
+    &[data-visibility="hidden"] {
+        display: none;
+    }
+
+
+    &--loading {
+        position: relative;
+        min-height: 40px;
+
+        .cu-loader {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        &[data-state="loading"] {
+            span {
+                visibility: hidden;
+            }
+
+            .cu-loader {
+                display: block;
+            }
+        }
+    }
+
+    &--violet {
+        background-color: $clr-violet;
+        border-color: $clr-violet;
+
+        &:hover:not([data-state="loading"]),
+        &:focus:not([data-state="loading"]) {
+            background-color: $clr-black;
+            border-color: $clr-black;
+        }
+    }
+}
+
+// Link button
+a.ma-btn {
+    text-align: center;
+}
+
+// Loader
+.cu {
+    // Loader
+    &-loader {
+        &::before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 3px solid $clr-white;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+    }
+}

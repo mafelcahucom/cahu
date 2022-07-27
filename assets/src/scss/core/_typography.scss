@@ -1,0 +1,26 @@
+/**
+ * Typography.
+ */
+body {
+    color: $clr-black;
+    font-family: 'Jost';
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+.cu {
+
+    // Article
+    &-article {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p {
+            margin-bottom: 1em;
+        }
+    }
+}

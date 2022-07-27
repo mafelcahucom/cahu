@@ -1,0 +1,171 @@
+/**
+ * Sidebar Navigation
+ */
+.mjnav {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+
+	li {
+		a {
+			display: block;
+			padding-left: 15px;
+			height: 40px;
+			color: #000000;
+			line-height: 40px;
+			text-decoration: none;
+
+			&:hover,
+			&:focus {
+				color: $clr-violet;
+				background: #f9f9f9;
+				transition: all 320ms ease-in-out 0s;
+			}
+		}
+
+		&.current-menu-item > a {
+			color: $clr-violet;
+			background: #f9f9f9;
+		}
+	}
+
+	ul.sub-menu {
+		padding: 0;
+		margin: 0;
+		max-height: 0px;
+		list-style: none;
+		overflow: hidden;
+		transition: max-height 200ms ease-out;
+
+		li {
+			a {
+				padding-left: 25px;
+			}
+
+			&:last-child  {
+				border-bottom: 0
+			}
+
+			ul.sub-menu a {
+				padding-left: 35px;
+			}
+		}
+	}
+
+	li.menu-item-has-children {
+		position: relative;
+
+		& > a {
+			padding-right: 45px;
+			width: 275px;
+		}
+	}
+
+	&__expand-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: absolute;
+		top: 0;
+		right: 5px;
+		width: 40px;
+		height: 40px;
+		color: $clr-white;
+		background: $clr-black;
+		border: 0;
+		border-radius: $br-radius;
+		border: 1px solid #ffffff;
+
+		* {
+			pointer-events: none;
+		}
+
+		svg {
+			display: block;
+			width: 20px;
+			transition: all 400ms ease-in-out;
+		}
+
+		&[data-state="opened"] {
+			color: #ffffff;
+			background: #000000;
+			svg {
+				transform: rotate(180deg);
+			}
+		}
+
+		&[data-state="closed"] > svg {
+			transform: rotate(0deg);
+		}
+
+		&:hover,
+		&:focus {
+			color: #ffffff;
+			background: #000000;
+			transition: all 320ms ease-in-out 0s;
+		}
+	}
+}
+
+
+/**
+ * Mobile Navigation Sidebar.
+ */
+.mjsidebar {
+	display: none;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 999999;
+
+	&__overlay {
+		position: relative;
+		width: 100%;
+		height: 100vh;
+		background: rgba(0,0,0,0.7);
+	}
+
+	&__panel {
+		position: relative;	
+		left: -300px;
+		width: 100%;
+		max-width: 300px;
+		height: 100%;
+		background: #ffffff;
+	}
+
+	&__close-btn {
+		display: block;
+		padding: 0;
+		margin-left: auto;
+		margin-bottom: 20px;
+		width: 45px;
+		color: #afafaf;
+		background: transparent;
+		border: 0;
+
+		&:after {
+			content: '\00d7';
+			font-size: 40px;
+		}
+
+		&:hover,
+		&:focus {
+			color: blue;
+			@include transition;
+		}
+	}
+
+	&__search {
+		padding: 0 15px;
+		margin-bottom: 25px;
+	}
+
+	&--slide-right {
+		animation: mjsidebar-slide-right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+	}
+
+	&--slide-left {
+		animation: mjsidebar-slide-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+	}
+}
