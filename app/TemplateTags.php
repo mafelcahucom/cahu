@@ -197,7 +197,7 @@ function the_entry_posted_on( $label = '' ) {
 }
 
 /**
- * Returns the tag list.
+ * Returns the tag list of post.
  *
  * @since 1.0.0
  * 
@@ -205,40 +205,300 @@ function the_entry_posted_on( $label = '' ) {
  * @param  string  $class    Additional class.
  * @return HTMLElement
  */
-function get_tag_list( $post_id = 0, $class = '' ) {
+function get_post_tag_list( $post_id = 0, $class = '' ) {
     if ( empty( $post_id ) ) {
         $post_id = get_the_ID();
     }
 
     $output = '';
     $tags   = get_the_tags( $post_id );
-    if ( ! empty( $tags ) ) {
-        $output .= '<ul class="'. esc_attr( $class ) .'">';
-        foreach( $tags as $tag ) {
-            $output .= '<li>';
-            $output .= '<a href="'. esc_url( get_tag_link( $tag->term_id ) ) .'">';
-            $output .= esc_html( $tag->name );
-            $output .= '</a>';
-            $output .= '</li>';
-        }
-        $output .= '</ul>';
+
+    if ( $tags ) {
+        $data   = array_map( function( $tag ) {
+            return [
+                'label' => $tag->name,
+                'url'   => get_tag_link( $tag->term_id )
+            ];
+        }, $tags );
     }
+    $output .= ( ! empty( $data ) ? get_unordered_list_link( $data, false, $class ) : '' );
     return $output;
 }
 
 /**
- * Prints the tag list.
+ * Prints the tag list of post.
  *
  * @since 1.0.0
  * 
- * @param  int     $post_id  The post id target.
- * @param  string  $class    Additional class.
+ * @param  integer  $post_id  The post id target.
+ * @param  string   $class    Additional class.
  * @return void
  */
-function the_tag_list( $post_id = 0, $class = '' ) {
-    echo get_tag_list( $post_id, $class );
+function the_post_tag_list( $post_id = 0, $class = '' ) {
+    echo get_post_tag_list( $post_id, $class );
 }
 
+/**
+ * Returns the tags list.
+ *
+ * @since 1.0.0
+ * 
+ * @param  boolean $has_count  Checks if need to add count.
+ * @param  string  $class      Additional class.
+ * @return HTMLElement
+ */
+function get_tags_list( $has_count = false, $class = '' ) {
+    $output = '';
+    $tags = get_tags([
+        'orderby'    => 'name',
+        'order'      => 'ASC',
+        'hide_empty' => true
+    ]);
+
+    if ( empty( $tags->errors ) ) {
+        $data = array_map( function( $tag ) {
+            return [
+                'label' => $tag->name,
+                'count' => $tag->count,
+                'url'   => get_tag_link( $tag->term_id )
+            ];
+        }, $tags );
+    }
+    $output .= ( ! empty( $data ) ? get_unordered_list_link( $data, $has_count, $class ) : '' );
+    return $output;
+}
+
+/**
+ * Prints the tags list.
+ *
+ * @since 1.0.0
+ * 
+ * @param  boolean $has_count  Checks if need to add count.
+ * @param  string  $class      Additional class.
+ * @return void
+ */
+function the_tags_list( $has_count = false, $class = '' ) {
+    echo get_tags_list( $has_count, $class );
+} 
+
+/**
+ * Returns the category list of post.
+ * NOTE: can be only used in post or category term.
+ *
+ * @since 1.0.0
+ * 
+ * @param  integer  $post_id  The post id target.
+ * @param  string   $class    Additional class.
+ * @return HTMLElement
+ */
+function get_post_category_list( $post_id = 0, $class = '' ) {
+    if ( empty( $post_id ) ) {
+        $post_id = get_the_ID();
+    }
+
+    $output = '';
+    $categories = get_the_category( $post_id );
+    if ( $categories ) {
+        $data = array_map( function( $category ) {
+            return [
+                'label' => $category->name,
+                'url'   => get_category_link( $category->term_id )
+            ];
+        }, $categories );
+    }
+    $output .= ( ! empty( $data ) ? get_unordered_list_link( $data, false, $class ) : '' );
+    return $output;
+}
+
+/**
+ * Prints the category list of post.
+ * NOTE: can be only used in post or category term.
+ *
+ * @since 1.0.0
+ * 
+ * @param  integer  $post_id  The post id target.
+ * @param  string   $class    Additional class.
+ * @return void
+ */
+function the_post_category_list( $post_id = 0, $class = '' ) {
+    echo get_post_category_list( $post_id, $class );
+}
+
+/**
+ * Return the categories list.
+ *
+ * @since 1.0.0
+ * 
+ * @param  boolean $has_count  Checks if need to add count.
+ * @param  string  $class      Additional class.
+ * @return HTMLElement
+ */
+function get_categories_list( $has_count = false, $class = '' ) {
+    $output = '';
+    $categories = get_categories([
+        'orderby' => 'name',
+        'order'   => 'ASC',
+        'hide_empty' => true
+    ]);
+
+    if ( ! empty( $categories ) ) {
+        $data = array_map( function( $category ) {
+            return [
+                'label' => $category->name,
+                'count' => $category->count,
+                'url'   => get_category_link( $category->term_id )
+            ];
+        }, $categories );
+    }
+    $output .= ( ! empty( $data ) ? get_unordered_list_link( $data, $has_count, $class ) : '' );
+    return $output;
+}
+
+/**
+ * Prints the categories list.
+ *
+ * @since 1.0.0
+ * 
+ * @param  boolean $has_count  Checks if need to add count.
+ * @param  string  $class      Additional class.
+ * @return void
+ */
+function the_categories_list( $has_count = false, $class = '' ) {
+    echo get_categories_list( $has_count, $class );
+}
+
+/**
+ * Returns the term list of a certain custom post.
+ *
+ * @since 1.0.0
+ * 
+ * @param  integer  $post_id   The post id target.
+ * @param  string   $taxonomy  The name of the taxonomy.
+ * @param  string   $class     Additional class.
+ * @return HTMLElement
+ */
+function get_post_term_list( $post_id = 0, $taxonomy, $class = '' ) {
+    if ( empty( $taxonomy ) ) {
+        return;
+    }
+
+    if ( empty( $post_id ) ) {
+        $post_id = get_the_ID();
+    }
+
+    $output = '';
+    $terms = get_the_terms( $post_id, $taxonomy );
+    if ( $terms ) {
+        $data  = array_map( function( $term ) {
+            return [
+                'label' => $term->name,
+                'url'   => get_term_link( $term, $taxonomy )
+            ];
+        }, $terms );
+    }
+    $output .= ( ! empty( $data ) ? get_unordered_list_link( $data, false, $class ) : '' );
+    return $output;
+}
+
+/**
+ * Prints the term list of a certain custom post.
+ *
+ * @since 1.0.0
+ * 
+ * @param  integer  $post_id   The post id target.
+ * @param  string   $taxonomy  The name of the taxonomy.
+ * @param  string   $class     Additional class.
+ * @return void
+ */
+function the_post_term_list( $post_id = 0, $taxonomy, $class = '' ) {
+    echo get_post_term_list( $post_id, $taxonomy, $class );
+}
+
+/**
+ * Returns the terms list.
+ *
+ * @since 1.0.0
+ * 
+ * @param  string   $taxonomy   The taxonomy name.
+ * @param  boolean  $has_count  Checks if need to add count.
+ * @param  string   $class      Additional class.
+ * @return HTMLElement
+ */
+function get_terms_list( $taxonomy, $has_count = false, $class = '' ) {
+    if ( empty( $taxonomy ) ) {
+        return;
+    }
+
+    $output = '';
+    $terms = get_terms([
+        'taxonomy'   => $taxonomy,
+        'orderby'    => 'name',
+        'order'      => 'ASC',
+        'parent'     => 0,
+        'hide_empty' => true
+    ]);
+
+    if ( empty( $terms->errors ) ) {
+        $data = array_map( function( $term ) {
+            return [
+                'label' => $term->name,
+                'count' => $term->count,
+                'url'   => get_term_link( $term, $taxonomy )
+            ];
+        }, $terms );
+    }
+    $output .= ( ! empty( $data ) ? get_unordered_list_link( $data, $has_count, $class ) : '' );
+    return $output;
+}
+
+/**
+ * Prints the terms list.
+ *
+ * @since 1.0.0
+ * 
+ * @param  string   $taxonomy   The taxonomy name.
+ * @param  boolean  $has_count  Checks if need to add count.
+ * @param  string   $class      Additional class.
+ * @return void
+ */
+function the_terms_list( $taxonomy, $has_count = false, $class = '' ) {
+    echo get_terms_list( $taxonomy, $has_count, $class );
+}
+
+/**
+ * Returns unordered list containing a links.
+ *
+ * @since 1.0.0
+ *
+ * @param  array    $data        Containing the data to used |label|url|count.
+ * $data = [
+ *      'label' => (string)  The label of the link.
+ *      'url'   => (string)  The url of the link.
+ *      'count' => (integer) The count label or additional label.
+ * ];
+ * @param  boolean  $has_count  Check if needed to add a count in label.
+ * @param  string   $class      Additional class.
+ * @return HTMLELement
+ */
+function get_unordered_list_link( $data = [], $has_count = false, $class = '' ) {
+    if ( empty( $data ) ) {
+        return;
+    }
+
+    $output = '<ul class="'. esc_attr( $class ) .'">';
+    foreach ( $data as $value ) {
+        $output .= '<li>';
+        $output .= '<a href="'. esc_url( $value['url'] ) .'">';
+        $output .= esc_html( $value['label'] );
+        if ( $has_count ) {
+            $output .= '<span>('. $value['count'] .')</span>';
+        }
+        $output .= '</a>';
+        $output .= '</li>';
+    }
+    $output .= '</ul>';
+    return $output;
+}
 
 /**
  * Prints a link of date.

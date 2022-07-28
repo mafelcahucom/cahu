@@ -29,7 +29,7 @@
         <?php the_content(); ?>
     </div>
     <footer class="cu-entry-footer">
-        <?php Cahu\the_tag_list(); ?>
-        <?php var_dump( wp_get_post_categories( get_the_ID(), [ 'fields' => 'all' ] ) ); ?>
+        <?php Cahu\the_post_tag_list(); ?>
+        <?php echo Cahu\get_post_category_list(); ?>
     </footer>
 </article>

@@ -3,6 +3,8 @@ namespace Cahu;
 
 use Cahu\Theme;
 use Cahu\Actions;
+use Cahu\PostTypes;
+use Cahu\Taxonomies;
 use Cahu\Traits\Singleton;
 
 /**
@@ -34,7 +36,9 @@ final class Init {
 	private static function get_classes() {
 		return [
 			Theme::class,
-			Actions::class
+			Actions::class,
+			PostTypes::class,
+			Taxonomies::class
 		];
 	}
 
